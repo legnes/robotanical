@@ -1,0 +1,8 @@
+# Public built #
+################
+static/bundle.js
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
