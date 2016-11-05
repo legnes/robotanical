@@ -1,9 +1,9 @@
-var Counter = require('./Counter');
+var LSystem = require('./LSystem');
 
+var pythagoras = new LSystem('0', { '1': '11', '0': '1[0]0' });
+console.log(pythagoras.word);
 
-console.log('hey');
-
-var counter = new Counter();
-console.log(counter.increment());
-console.log(counter.increment());
-console.log(counter.increment());
+for (var i = 0; i < 10; i++) {
+  pythagoras.step();
+  console.log(pythagoras.word);
+}
