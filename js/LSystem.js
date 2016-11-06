@@ -2,7 +2,7 @@ var SEPARATOR = '';
 
 // A simple DOL-system
 // Axiom defines the starting word
-// Rules (productions) look like {a: 'ab', b: 'a'}
+// Rules (productions) look like { a: 'ab', b: 'a' }
 function LSystem(axiom, rules) {
   this.word = axiom;
   this.rules = rules;
