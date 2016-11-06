@@ -22,6 +22,7 @@ function Turtle(svg, dXY, dTh, rules) {
   this.clearState();
 }
 
+// TURTLE ACTIONS ///////////////////////////////////////////////
 Turtle.prototype[TURTLE_ACTIONS.LEFT] = function() {
   this.theta += this.dTh;
 };
@@ -45,6 +46,7 @@ Turtle.prototype[TURTLE_ACTIONS.PUSH] = function() {
 Turtle.prototype[TURTLE_ACTIONS.POP] = function() {
   this.setState(this.stateStack.pop());
 };
+//////////////////////////////////////////////////////////////////
 
 Turtle.prototype.catPath = function(op, x, y) {
   this.path += op + x + ' ' + y;
