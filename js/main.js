@@ -148,7 +148,10 @@ var contextTurtle = new Turtle(svgs[svgInd++], 1, 27.5*PI/180, LINDENMAYER_TURTL
 //Ethan made testing n system
 var N_TEST_RULES = {
   'F': [
-    new LSystem.Rule('F-FF+FF--F+F-F', 100, null, null, 0, 8),
+    new LSystem.Rule('F-FF+FF--F+F-F', 25, null, null, 3, 8),
+    new LSystem.Rule('F+F', 25, null, null, 0, 8),
+    new LSystem.Rule('F+FF-FF', 25, null, null, 2, 8),
+    new LSystem.Rule('F-F', 25, null, null, 0, 8)
   ]
 };
 var ntest = new LSystem('FF+FF', N_TEST_RULES);
@@ -218,7 +221,7 @@ function stepAndDraw(n, stepTimeMs) {
       stoc2Turtle.draw(words.stoc2);
       contextTurtle.draw(words.context);
       //eTurtle.draw(words.eSys);
-      nTurtle.draw(words.context);
+      nTurtle.draw(words.ntest);
       start = time;
     }
 
@@ -261,4 +264,4 @@ function stepThenDraw(n, animate, drawStepMs) {
 
 //stepThenDraw(6);
 // stepThenDraw(3, true, 0);
-stepAndDraw(3, 1000);
+stepAndDraw(5, 1000);
