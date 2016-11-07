@@ -45,44 +45,62 @@ var serpinskiTurtle = new Turtle(svgs[svgInd++], 1, 2*PI/3, {
 var dragon = new LSystem('F-F-F-F', {
   'F': 'F-FF--F-F'
 });
-var dragonTurtle = new Turtle(svgs[svgInd++], 1, Math.PI/2, LINDENMAYER_TURTLE_RULES);
+var dragonTurtle = new Turtle(svgs[svgInd++], 1, PI/2, LINDENMAYER_TURTLE_RULES);
 
 var box = new LSystem('F-F-F-F', {
   'F': 'FF-F-F-F-FF'
 });
-var boxTurtle = new Turtle(svgs[svgInd++], 1, Math.PI/2, LINDENMAYER_TURTLE_RULES);
+var boxTurtle = new Turtle(svgs[svgInd++], 1, PI/2, LINDENMAYER_TURTLE_RULES);
 
 var hilbert = new LSystem('L', {
   'L': '+RF-LFL-FR+',
   'R': '-LF+RFR+FL-'
 });
-var hilbertTurtle = new Turtle(svgs[svgInd++], 1, Math.PI/2, LINDENMAYER_TURTLE_RULES);
+var hilbertTurtle = new Turtle(svgs[svgInd++], 1, PI/2, LINDENMAYER_TURTLE_RULES);
 
 var plant = new LSystem('X', {
   'X': 'F[+X]F[-X]+X',
   'F': 'FF'
 });
-var plantTurtle = new Turtle(svgs[svgInd++], 1, Math.PI/9, LINDENMAYER_TURTLE_RULES);
+var plantTurtle = new Turtle(svgs[svgInd++], 1, PI/9, LINDENMAYER_TURTLE_RULES);
 
 var STOC_TEST_RULES = {
   'F': [
-    new LSystem.StochasticRule('F[+F]F[-F]F', 33),
-    new LSystem.StochasticRule('F[+F]F', 33),
-    new LSystem.StochasticRule('F[-F]F', 34)
+    new LSystem.Rule('F[+F]F[-F]F', 33),
+    new LSystem.Rule('F[+F]F', 33),
+    new LSystem.Rule('F[-F]F', 34)
   ]
 };
 var stoc1 = new LSystem('F', STOC_TEST_RULES);
-var stoc1Turtle = new Turtle(svgs[svgInd++], 1, 27.5*Math.PI/180, LINDENMAYER_TURTLE_RULES);
+var stoc1Turtle = new Turtle(svgs[svgInd++], 1, 27.5*PI/180, LINDENMAYER_TURTLE_RULES);
 
 var stoc2 = new LSystem('F', STOC_TEST_RULES);
-var stoc2Turtle = new Turtle(svgs[svgInd++], 1, 27.5*Math.PI/180, LINDENMAYER_TURTLE_RULES);
+var stoc2Turtle = new Turtle(svgs[svgInd++], 1, 27.5*PI/180, LINDENMAYER_TURTLE_RULES);
+
+var context = new LSystem('F0F1F1', {
+  '0': [
+    new LSystem.Rule('1', null, '0', '0'),
+    new LSystem.Rule('0', null, '0', '1'),
+    new LSystem.Rule('1', null, '1', '0'),
+    new LSystem.Rule('1[+F1F1]', null, '1', '1')
+  ],
+  '1': [
+    new LSystem.Rule('0', null, '0', '0'),
+    new LSystem.Rule('1F1', null, '0', '1'),
+    new LSystem.Rule('1', null, '1', '0'),
+    new LSystem.Rule('0', null, '1', '1')
+  ],
+  '+': '-',
+  '-': '+'
+}, '01');
+var contextTurtle = new Turtle(svgs[svgInd++], 1, 27.5*PI/180, LINDENMAYER_TURTLE_RULES);
 
 
 
 
 
 // STEP AND DRAW
-for (var i = 0; i < 7; i++) {
+for (var i = 0; i < 6; i++) {
   pythagoras.step();
   serpinski.step();
   dragon.step();
@@ -91,6 +109,7 @@ for (var i = 0; i < 7; i++) {
   plant.step();
   stoc1.step();
   stoc2.step();
+  context.step();
 }
 
 pythagorasTurtle.draw(pythagoras.word);
@@ -101,3 +120,4 @@ hilbertTurtle.draw(hilbert.word);
 plantTurtle.draw(plant.word);
 stoc1Turtle.draw(stoc1.word);
 stoc2Turtle.draw(stoc2.word);
+contextTurtle.draw(context.word);
