@@ -18,11 +18,16 @@ function LSystem(axiom, rules, context) {
 //   NOTE: sum(prob) over all predicates of a given letter should be <= 100%
 // lContext is the path required on the left side of the letter
 // rContext is the axial tree required on the right side of the letter
-function LSystemRule(res, prob, lContext, rContext) {
+// minN is the minimum n which will activate the gene
+// maxN is the minimum n which will activate the gene
+function LSystemRule(res, prob, lContext, rContext, minN, maxN) {
   this.res = res;
   this.prob = prob || 100;
   this.lContext = lContext;
-  this.rContext = rContext
+  this.rContext = rContext;
+  this.minN = minN;
+  this.maxN = maxN;
+  console.log(minN);
 }
 
 // TODO: CLEAN THIS MOTHER UP!!!
@@ -104,7 +109,7 @@ LSystem.prototype.checkContext = function(ind, rule) {
 };
 
 // Step the L-System according to the rules
-LSystem.prototype.step = function() {
+LSystem.prototype.step = function(n) {
   var letters = this.word.split(SEPARATOR);
   for (var i = 0; i < letters.length; i++) {
     var letter = letters[i];
@@ -123,8 +128,13 @@ LSystem.prototype.step = function() {
         var lSystemRule = rule[j];
         if (rand < (prob += lSystemRule.prob)) {
           if (this.checkContext(i, lSystemRule)) {
-            res = lSystemRule.res;
-            break;
+          	//console.log(n + " was n\n");
+          	//console.log(lSystemRule.minN + " was min\n");
+          	//console.log(lSystemRule.maxN + " was max\n");
+          	//if(n>lSystemRule.minN&&n<lSystemRule.maxN){
+            	res = lSystemRule.res;
+            	break;
+        	//}
           }
         }
       }

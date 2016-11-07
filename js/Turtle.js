@@ -2,6 +2,8 @@ var TURTLE_ACTIONS = {
   LEFT: 'turnLeft',
   RIGHT: 'turnRight',
   FORWARD: 'drawForward',
+  LEFT2: 'turnLeft2',
+  RIGHT2: 'turnRight2',
   PUSH: 'push',
   POP: 'pop'
 };
@@ -29,6 +31,14 @@ Turtle.prototype[TURTLE_ACTIONS.LEFT] = function() {
 
 Turtle.prototype[TURTLE_ACTIONS.RIGHT] = function() {
   this.theta -= this.dTh;
+};
+
+Turtle.prototype[TURTLE_ACTIONS.RIGHT2] = function() {
+  this.theta -= this.dTh/2;
+};
+
+Turtle.prototype[TURTLE_ACTIONS.LEFT2] = function() {
+  this.theta += this.dTh/2;
 };
 
 Turtle.prototype[TURTLE_ACTIONS.FORWARD] = function() {
