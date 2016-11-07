@@ -19,7 +19,12 @@ var svgInd = 0;
 
 
 
-// DEFINE L-SYSTEMS AND TURTLES
+// DEFINE L-SYSTEMS AND TURTLES ////////////////////////////////////
+// To make sure your new lsystem + turtle gets drawn, add it to:
+//  - getWords()
+//  - step() and draw() in stepAndDraw()
+//  - stepThenDraw() x2
+
 var pythagoras = new LSystem('0', {
   '0': '1[0]0',
   '1': '11'
@@ -95,29 +100,103 @@ var context = new LSystem('F0F1F1', {
 }, '01');
 var contextTurtle = new Turtle(svgs[svgInd++], 1, 27.5*PI/180, LINDENMAYER_TURTLE_RULES);
 
-
-
-
-
-// STEP AND DRAW
-for (var i = 0; i < 6; i++) {
-  pythagoras.step();
-  serpinski.step();
-  dragon.step();
-  box.step();
-  hilbert.step();
-  plant.step();
-  stoc1.step();
-  stoc2.step();
-  context.step();
+function getWords() {
+  return {
+    pythagoras: pythagoras.word,
+    serpinski: serpinski.word,
+    dragon: dragon.word,
+    box: box.word,
+    hilbert: hilbert.word,
+    plant: plant.word,
+    stoc1: stoc1.word,
+    stoc2: stoc2.word,
+    context: context.word
+  };
 }
 
-pythagorasTurtle.draw(pythagoras.word);
-serpinskiTurtle.draw(serpinski.word);
-dragonTurtle.draw(dragon.word);
-boxTurtle.draw(box.word);
-hilbertTurtle.draw(hilbert.word);
-plantTurtle.draw(plant.word);
-stoc1Turtle.draw(stoc1.word);
-stoc2Turtle.draw(stoc2.word);
-contextTurtle.draw(context.word);
+
+
+
+
+// STEP AND DRAW //////////////////////////////////////////
+// Draw after each step
+function stepAndDraw(n, stepTimeMs) {
+  var wordHistory = [];
+
+  var steps = 0;
+  function step(time) {
+    pythagoras.step();
+    serpinski.step();
+    dragon.step();
+    box.step();
+    hilbert.step();
+    plant.step();
+    stoc1.step();
+    stoc2.step();
+    context.step();
+    wordHistory.push(getWords());
+
+    if (++steps < n) {
+      setTimeout(step, 0.0);
+    }
+  }
+
+  var start;
+  function draw(time) {
+    // If we have words to draw, and either
+    // this is the first frame or enough time
+    // has elapsed since the last frame, DRAW
+    if (wordHistory.length && (!start || (time - start) >= stepTimeMs)) {
+      var words = wordHistory.shift();
+
+      pythagorasTurtle.draw(words.pythagoras);
+      serpinskiTurtle.draw(words.serpinski);
+      dragonTurtle.draw(words.dragon);
+      boxTurtle.draw(words.box);
+      hilbertTurtle.draw(words.hilbert);
+      plantTurtle.draw(words.plant);
+      stoc1Turtle.draw(words.stoc1);
+      stoc2Turtle.draw(words.stoc2);
+      contextTurtle.draw(words.context);
+
+      start = time;
+    }
+
+    requestAnimationFrame(draw)
+  }
+
+  setTimeout(step, 0.0);
+  requestAnimationFrame(draw);
+}
+
+
+// Step all the way then draw
+function stepThenDraw(n, animate, drawStepMs) {
+  for (var i = 0; i < n; i++) {
+    pythagoras.step();
+    serpinski.step();
+    dragon.step();
+    box.step();
+    hilbert.step();
+    plant.step();
+    stoc1.step();
+    stoc2.step();
+    context.step();
+  }
+
+  var drawFn = animate ? 'animate' : 'draw';
+  pythagorasTurtle[drawFn](pythagoras.word, drawStepMs);
+  serpinskiTurtle[drawFn](serpinski.word, drawStepMs);
+  dragonTurtle[drawFn](dragon.word, drawStepMs);
+  boxTurtle[drawFn](box.word, drawStepMs);
+  hilbertTurtle[drawFn](hilbert.word, drawStepMs);
+  plantTurtle[drawFn](plant.word, drawStepMs);
+  stoc1Turtle[drawFn](stoc1.word, drawStepMs);
+  stoc2Turtle[drawFn](stoc2.word, drawStepMs);
+  contextTurtle[drawFn](context.word, drawStepMs);
+}
+
+
+stepThenDraw(6);
+// stepThenDraw(2, true, 0);
+// stepAndDraw(6, 1000);

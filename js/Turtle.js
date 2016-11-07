@@ -48,6 +48,19 @@ Turtle.prototype[TURTLE_ACTIONS.POP] = function() {
 };
 //////////////////////////////////////////////////////////////////
 
+Turtle.prototype.doAction = function(letter) {
+  var action = this.rules[letter];
+  if (!action) return;
+
+  if (Array.isArray(action)) {
+    for (var i = 0; i < action.length; i++) {
+      this[action[i]]();
+    }
+  } else {
+    this[action]();
+  }
+};
+
 Turtle.prototype.catPath = function(op, x, y) {
   this.path += op + x + ' ' + y;
 };
@@ -77,36 +90,61 @@ Turtle.prototype.clearState = function() {
   });
 };
 
-Turtle.prototype.draw = function(word) {
-  var maxX = maxY = -Infinity;
-  var minX = minY = Infinity;
+function getBounds() {
+  return {
+    maxX: -Infinity,
+    maxY: -Infinity,
+    minX: Infinity,
+    minY: Infinity
+  };
+}
 
-  function checkBounds() {
-    maxX = Math.max(maxX, this.x);
-    maxY = Math.max(maxY, this.y);
-    minX = Math.min(minX, this.x);
-    minY = Math.min(minY, this.y);
-  }
+Turtle.prototype.checkBounds = function(bounds) {
+  bounds.maxX = Math.max(bounds.maxX, this.x);
+  bounds.maxY = Math.max(bounds.maxY, this.y);
+  bounds.minX = Math.min(bounds.minX, this.x);
+  bounds.minY = Math.min(bounds.minY, this.y);
+};
+
+Turtle.prototype.render = function(bounds) {
+  this.svg.innerHTML = '<path d="' + this.path + '" fill="transparent" stroke="black" stroke-width="0.1"/>';
+  this.svg.setAttribute('viewBox', bounds.minX + ' ' + bounds.minY + ' ' + (bounds.maxX - bounds.minX) + ' ' + (bounds.maxY - bounds.minY));
+};
+
+Turtle.prototype.draw = function(word) {
+  var bounds = getBounds();
 
   this.clearState();
   for (var i = 0; i < word.length; i++) {
     var letter = word[i];
-    var op = this.rules[letter];
-    if (!op) continue;
-
-    if (Array.isArray(op)) {
-      for (var j = 0; j < op.length; j++) {
-        this[op[j]]();
-      }
-    } else {
-      this[op]();
-    }
-
-    checkBounds.call(this);
+    this.doAction(letter)
+    this.checkBounds(bounds);
   }
 
-  this.svg.innerHTML = '<path d="' + this.path + '" fill="transparent" stroke="black" stroke-width="0.1"/>';
-  this.svg.setAttribute('viewBox', minX + ' ' + minY + ' ' + (maxX - minX) + ' ' + (maxY - minY));
+  this.render(bounds);
+};
+
+Turtle.prototype.animate = function(word, drawStepMs) {
+  drawStepMs = drawStepMs || 0;
+  var bounds = getBounds();
+  var start, i = 0;
+
+  function drawLetter(time) {
+    if (!start || (time - start) >= drawStepMs) {
+      start = time;
+      var letter = word[i++];
+      this.doAction(letter);
+      this.checkBounds(bounds);
+      this.render(bounds);
+    }
+
+    if (i < word.length) {
+      requestAnimationFrame(drawLetter.bind(this));
+    }
+  }
+
+  this.clearState();
+  requestAnimationFrame(drawLetter.bind(this));
 };
 
 Turtle.TURTLE_ACTIONS = TURTLE_ACTIONS;
