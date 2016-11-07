@@ -148,10 +148,10 @@ var contextTurtle = new Turtle(svgs[svgInd++], 1, 27.5*PI/180, LINDENMAYER_TURTL
 //Ethan made testing n system
 var N_TEST_RULES = {
   'F': [
-    new LSystem.Rule('F-FFFF--F-F', 100, null, null, 0, 8),
+    new LSystem.Rule('F-FF+FF--F+F-F', 100, null, null, 0, 8),
   ]
 };
-var ntest = new LSystem('F', N_TEST_RULES);
+var ntest = new LSystem('FF+FF', N_TEST_RULES);
 var nTurtle = new Turtle(svgs[0], 1, 27.5*PI/180, LINDENMAYER_TURTLE_RULES);
 
 

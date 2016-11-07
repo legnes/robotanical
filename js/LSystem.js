@@ -25,6 +25,12 @@ function LSystemRule(res, prob, lContext, rContext, minN, maxN) {
   this.prob = prob || 100;
   this.lContext = lContext;
   this.rContext = rContext;
+  if(minN == undefined){
+  	minN = -1;
+  }
+  if(maxN == undefined){
+  	maxN = 10000;
+  }
   this.minN = minN;
   this.maxN = maxN;
   console.log(minN);
@@ -131,10 +137,10 @@ LSystem.prototype.step = function(n) {
           	//console.log(n + " was n\n");
           	//console.log(lSystemRule.minN + " was min\n");
           	//console.log(lSystemRule.maxN + " was max\n");
-          	//if(n>lSystemRule.minN&&n<lSystemRule.maxN){
+          	if(n>lSystemRule.minN&&n<lSystemRule.maxN){
             	res = lSystemRule.res;
             	break;
-        	//}
+        	}
           }
         }
       }
