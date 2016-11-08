@@ -18,11 +18,11 @@ function LSystem(axiom, rules, context) {
 //   NOTE: sum(prob) over all predicates of a given letter should be <= 100%
 // lContext is the path required on the left side of the letter
 // rContext is the axial tree required on the right side of the letter
-function LSystemRule(res, prob, lContext, rContext) {
+function LSystemRule(res, opts) {
   this.res = res;
-  this.prob = prob || 100;
-  this.lContext = lContext;
-  this.rContext = rContext
+  this.prob = opts.prob || 100;
+  this.lContext = opts.lContext;
+  this.rContext = opts.rContext;
 }
 
 // TODO: CLEAN THIS MOTHER UP!!!

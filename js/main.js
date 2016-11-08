@@ -71,9 +71,9 @@ var plantTurtle = new Turtle(svgs[svgInd++], 1, PI/9, LINDENMAYER_TURTLE_RULES);
 
 var STOC_TEST_RULES = {
   'F': [
-    new LSystem.Rule('F[+F]F[-F]F', 33),
-    new LSystem.Rule('F[+F]F', 33),
-    new LSystem.Rule('F[-F]F', 34)
+    new LSystem.Rule('F[+F]F[-F]F', { prob: 33 }),
+    new LSystem.Rule('F[+F]F', { prob: 33 }),
+    new LSystem.Rule('F[-F]F', { prob: 34 })
   ]
 };
 var stoc1 = new LSystem('F', STOC_TEST_RULES);
@@ -84,16 +84,16 @@ var stoc2Turtle = new Turtle(svgs[svgInd++], 1, 27.5*PI/180, LINDENMAYER_TURTLE_
 
 var context = new LSystem('F0F1F1', {
   '0': [
-    new LSystem.Rule('1', null, '0', '0'),
-    new LSystem.Rule('0', null, '0', '1'),
-    new LSystem.Rule('1', null, '1', '0'),
-    new LSystem.Rule('1[+F1F1]', null, '1', '1')
+    new LSystem.Rule('1', { lContext: '0', rContext: '0' }),
+    new LSystem.Rule('0', { lContext: '0', rContext: '1' }),
+    new LSystem.Rule('1', { lContext: '1', rContext: '0' }),
+    new LSystem.Rule('1[+F1F1]', { lContext: '1', rContext: '1' })
   ],
   '1': [
-    new LSystem.Rule('0', null, '0', '0'),
-    new LSystem.Rule('1F1', null, '0', '1'),
-    new LSystem.Rule('1', null, '1', '0'),
-    new LSystem.Rule('0', null, '1', '1')
+    new LSystem.Rule('0', { lContext: '0', rContext: '0' }),
+    new LSystem.Rule('1F1', { lContext: '0', rContext: '1' }),
+    new LSystem.Rule('1', { lContext: '1', rContext: '0' }),
+    new LSystem.Rule('0', { lContext: '1', rContext: '1' })
   ],
   '+': '-',
   '-': '+'
@@ -198,5 +198,5 @@ function stepThenDraw(n, animate, drawStepMs) {
 
 
 stepThenDraw(6);
-// stepThenDraw(2, true, 0);
-// stepAndDraw(6, 1000);
+// stepThenDraw(6, true, 0);
+// stepAndDraw(6, 100);
