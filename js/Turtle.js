@@ -109,6 +109,43 @@ Turtle.prototype.checkBounds = function(bounds) {
 Turtle.prototype.render = function(bounds) {
   this.svg.innerHTML = '<path d="' + this.path + '" fill="transparent" stroke="black" stroke-width="0.1"/>';
   this.svg.setAttribute('viewBox', bounds.minX + ' ' + bounds.minY + ' ' + (bounds.maxX - bounds.minX) + ' ' + (bounds.maxY - bounds.minY));
+  // this.save(1024);
+};
+
+Turtle.prototype.save = function(resolution) {
+  resolution = resolution || 1600;
+
+  var canvas = document.getElementsByTagName('canvas')[0];
+  canvas.setAttribute('width', resolution);
+  canvas.setAttribute('height', resolution);
+
+  // Set up image
+  var ctx = canvas.getContext('2d');
+  var img = new Image();
+  img.onload = (function() {
+    ctx.drawImage(img, 0, 0);
+
+    // Download
+    var a = document.createElement('a');
+    document.body.appendChild(a);
+    a.style = "display: none";
+    a.href = canvas.toDataURL();
+    a.download = 'fractal.png';
+    a.click();
+    this.svg.setAttribute('width', w);
+    this.svg.setAttribute('height', h);
+  }).bind(this);
+
+  // Source image with the svg
+  var w = this.svg.getAttribute('width');
+  var h = this.svg.getAttribute('height');
+  this.svg.setAttribute('width', resolution);
+  this.svg.setAttribute('height', resolution);
+  var xml = new XMLSerializer().serializeToString(this.svg);
+  var svg64 = btoa(xml);
+  var b64Start = 'data:image/svg+xml;base64,';
+  var image64 = b64Start + svg64;
+  img.src = image64;
 };
 
 Turtle.prototype.draw = function(word) {
