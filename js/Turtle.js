@@ -147,6 +147,6 @@ Turtle.prototype.animate = function(word, drawStepMs) {
   requestAnimationFrame(drawLetter.bind(this));
 };
 
-Turtle.TURTLE_ACTIONS = TURTLE_ACTIONS;
+Turtle.ACTIONS = TURTLE_ACTIONS;
 
 module.exports = Turtle;
