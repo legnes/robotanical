@@ -1,5 +1,6 @@
 var LSystem = require('./LSystem');
 var Turtle = require('./Turtle');
+var util = require('./util');
 
 var LINDENMAYER_TURTLE_RULES = {
   'F': Turtle.ACTIONS.FORWARD,
@@ -11,12 +12,60 @@ var LINDENMAYER_TURTLE_RULES = {
 
 function Plant(svg, opts) {
   this.svg = svg;
-  this.lSystem = new LSystem(opts.axiom, opts.productions, opts.context);
+  this.axiom = opts.axiom;
+  this.productions = opts.productions;
+  this.context = opts.context;
+  this.dPosition = opts.dPosition || 1;
+  this.dTheta = opts.dTheta || Math.PI / 2;
+  this.rules = opts.rules || util.clone(LINDENMAYER_TURTLE_RULES);
+
+  this.lSystem = new LSystem(this.axiom, this.productions, this.context);
   this.turtle = new Turtle(svg,
-    opts.dPosition || 1,
-    opts.dTheta || Math.PI / 2,
-    opts.rules || LINDENMAYER_TURTLE_RULES
+    this.dPosition,
+    this.dTheta,
+    this.rules
   );
+}
+
+// Seed a new plant from parents
+// Contexts get summed, turtle rules use Lindenmayer
+// Axiom, angle, dPos, and letter productions are selected
+// randomly (across an even distribution) from the parents
+Plant.seed = function(svg, parents) {
+  var parentCount = parents.length;
+
+  // Resolve child productions and context
+  var prodParentInds = {};
+  var childProds = {};
+  var childContext = '';
+  for (var i = 0; i < parentCount; i++) {
+    var parent = parents[i];
+
+    // Add the parent context to the child context
+    childContext = util.mergeStrings(childContext, parent.context);
+
+    // See if we should clone any of this parent's productions
+    for (var letter in parent.productions) {
+      if (typeof prodParentInds[letter] === 'undefined') {
+        // We haven't come across a production for this letter
+        // Choose a parent from which this letter will inherit
+        prodParentInds[letter] = util.randomInt(parentCount);
+      }
+
+      if (prodParentInds[letter] === i) {
+        // Clone the parent's production for this letter
+        childProds[letter] = util.clone(parent.productions[letter]);
+      }
+    }
+  }
+
+  return new Plant(svg, {
+    axiom: parents[util.randomInt(parentCount)].axiom,
+    productions: childProds,
+    context: childContext,
+    dPosition: parents[util.randomInt(parentCount)].dPosition,
+    dTheta: parents[util.randomInt(parentCount)].dTheta
+  });
 }
 
 /*
