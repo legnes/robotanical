@@ -6,7 +6,7 @@ util.randomInt = function(cap) {
 
 util.clone = function(obj) {
   return JSON.parse(JSON.stringify(obj));
-}
+};
 
 util.mergeStrings = function() {
   var outStr = '';
@@ -21,6 +21,6 @@ util.mergeStrings = function() {
     }
   }
   return outStr;
-}
+};
 
 module.exports = util;
