@@ -208,5 +208,5 @@ function stepThenDraw(n, drawStepMs) {
 
 
 // stepAndDraw(6, 100);
-// stepThenDraw(6, true, 0);
-stepThenDraw(6);
+stepThenDraw(6, true, 0);
+// stepThenDraw(6);
